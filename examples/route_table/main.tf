@@ -14,7 +14,7 @@ module "resource_group" {
   source = "git::https://github.com/nexient-llc/tf-azurerm-module_primitive-resource_group.git?ref=0.2.0"
 
   name     = local.resource_group_name
-  location = var.region
+  location = var.location
   tags = {
     resource_name = local.resource_group_name
   }
@@ -26,7 +26,7 @@ module "resource_names" {
 
   for_each = var.resource_names_map
 
-  region                  = join("", split("-", each.value.region))
+  region                  = join("", split("-", var.location))
   class_env               = var.class_env
   cloud_resource_type     = each.value.name
   instance_env            = var.instance_env

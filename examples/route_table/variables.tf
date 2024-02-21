@@ -15,19 +15,16 @@ variable "resource_names_map" {
   type = map(object({
     name       = string
     max_length = optional(number, 60)
-    region     = optional(string, "eastus2")
   }))
 
   default = {
     resource_group = {
       name       = "rg"
       max_length = 80
-      region     = "eastus"
     }
     route_table = {
       name       = "rt"
       max_length = 80
-      region     = "eastus"
     }
   }
 }
@@ -59,21 +56,6 @@ variable "logical_product_service" {
   validation {
     condition     = can(regex("^[_\\-A-Za-z0-9]+$", var.logical_product_service))
     error_message = "The variable must contain letters, numbers, -, _, and .."
-  }
-}
-
-variable "region" {
-  type        = string
-  description = <<EOF
-    (Required) The location where the resource will be created. Must not have spaces
-    For example, eastus, westus, centralus etc.
-  EOF
-  nullable    = false
-  default     = "eastus2"
-
-  validation {
-    condition     = length(regexall("\\b \\b", var.region)) == 0
-    error_message = "Spaces between the words are not allowed."
   }
 }
 
@@ -127,4 +109,8 @@ variable "tags" {
 variable "location" {
   description = "(Required) The location/region where the route table is created. Changing this forces a new resource to be created."
   type        = string
+  validation {
+    condition     = length(regexall("\\b \\b", var.location)) == 0
+    error_message = "Spaces between the words are not allowed."
+  }
 }
